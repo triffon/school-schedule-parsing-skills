@@ -1,0 +1,9 @@
+# Source artifacts are a school's own data and never belong in the shared
+# library — a Skill describes an artifact's layout, it does not carry the
+# artifact. Ignored here so that a draft alongside the Skill being written
+# cannot be committed by accident.
+*.pdf
+*.xlsx
+*.xls
+*.ods
+*.docx

@@ -18,6 +18,8 @@ The publisher is a directory because the four Intake documents do not come from 
 
 That asymmetry is the reason this library is shared rather than vendored per school. A ministry Skill written once serves every operator in the country; a school Skill serves one school and is contributed mainly so the next school sees what a good one looks like.
 
+A third kind sits alongside them: a publisher that is a *platform*. A school that publishes its Timetable through EduPage is not choosing a layout — EduPage's is the same for every school on it, down to the field names — so `edupage/` is keyed by the platform, and one Skill reads every school hosted there. The test is whose decisions the Skill records. Where a school could change the layout tomorrow, the school is the publisher; where it could only change the data, the platform is.
+
 ## Resolution
 
 The pipeline looks for a Skill in the school's data repository first, then in this library:

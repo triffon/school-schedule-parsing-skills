@@ -10,7 +10,7 @@ schemaVersion: "1"
 
 ## The Source
 
-The same one-page `График на учебните седмици` that `parva-chastna-matematicheska-gimnazia/term` reads for the Term bounds, read here for everything that falls between them. Two Skills over one artifact: the bounds are settled in September and stay put, while a day off is added by the school during the year.
+The same one-page `График на учебните седмици` that `parva-chastna-matematicheska-gimnazia/term` reads for the bounds of one срок, read here for every day the school year does not teach on, wherever in the year it falls. Two Skills over one artifact: the bounds are settled in September and stay put, while a day off is added by the school during the year.
 
 Of the two possible Sources for this document, prefer this one over `ministry-of-education-and-science/non-school-days`. The ministerial order does not know about the school's own days off — the Christmas bazaar, the school's feast day — and this page carries both those and the ministry's, already narrowed to the grades ПЧМГ teaches.
 
@@ -24,9 +24,9 @@ Three places on the page hold non-school days, and all three are needed.
 
 **The gaps between consecutive numbered weeks.** Where one week ends and the next does not begin on the following day, the days in between are non-school days that appear in no list on the page. Week 1 ends `21.09.2026` and week 2 begins `23.09.2026`; the missing `22.09.2026` is Independence Day, and nothing else on the page mentions it.
 
-The `label` is what an operator sees in the diff. Use the page's own name for a vacation, the reason text for a day out of the boxes, and the name of the holiday for a day found only in a gap.
+The `label` is what an operator sees in the diff and, together with the calendar year the `start` falls in, what identifies the range from one re-parse to the next. Use the page's own name for a vacation, the reason text for a day out of the boxes, and the name of the holiday for a day found only in a gap — then read the two quirks about labels below.
 
-Only what falls inside the Term goes in. Both срокове are on the one page, and the срок not being published contributes nothing.
+Both срокове go in. The page holds the whole school year and so does this document: Non-school days belong to the year rather than to a срок, and the same list is published whichever срок the Term names. Read both halves of the week table and both boxes, and clip nothing to the Term.
 
 ## Quirks
 
@@ -34,13 +34,17 @@ Only what falls inside the Term goes in. Both срокове are on the one page
 
 **A gap is the only record of a public holiday.** The page lists what the school decided and what the ministry ordered; it does not list national holidays, because nobody needs telling. In срок I that is `22.09.2026`, Денят на независимостта, visible only as the day between weeks 1 and 2. In срок II the gap between week 29 (`23.04 – 29.04.2027`) and week 30 (`10.05 – 14.05.2027`) is ten days long, of which the boxes account for two: the rest are Good Friday, Easter, Easter Monday, the Monday-to-Tuesday carried over because 1 May falls on a Saturday, and Гергьовден. Read the gaps, not the lists, and use the lists to explain them.
 
-**`заповед МОН` is a citation, not a reason.** Several lines in the boxes — `05.05.2027- V-XI kлас – заповед МОН` — say only that the ministry ordered the day off. Label those `неучебен ден по заповед на МОН` rather than reproducing the citation; the day itself is what matters and the label is only read by a human.
+**`заповед МОН` is a citation, not a reason.** Several lines in the boxes — `05.05.2027- V-XI kлас – заповед МОН` — say only that the ministry ordered the day off. One label for all of them will not do, because two ranges of a year may not share one: the order itself gives the reason for each of these days in its item 2, so take the label from there — `Великден` for the 5th, `Ден на храбростта` for the 7th — and fall back to the holiday the day hangs off. The label is read by a human, so name the day rather than reproducing the citation.
 
 **The `край на учебна година` lines are not days off.** Three lines in the срок II box give the last day of the year for each grade range. They belong to `parva-chastna-matematicheska-gimnazia/term` as its `end`, and recording them here would exclude the last day of teaching from the calendar.
 
-**The mid-term vacation is filed under срок I but falls after it.** `Междусрочна ваканция / На 31.01-02.02.2027 г. – V-XII kлас` sits in the срок I box, below the days off. Срок I ends on `30.01.2027`, so the whole range is outside the Term and none of it is recorded. It is in that box because it follows срок I, not because it is part of it.
+**The mid-term vacation is filed under срок I but falls after it.** `Междусрочна ваканция / На 31.01-02.02.2027 г. – V-XII kлас` sits in the срок I box, below the days off; срок I ends on `30.01.2027`. It is in that box because it follows срок I, not because it is part of it — and it is recorded whichever срок is being published, like everything else on the page.
 
-**The school and the ministry disagree about `30.01.2027`.** The ministerial order starts the mid-term vacation on the 30th; this page ends срок I on the 30th and starts the vacation on the 31st. Both dates are a weekend, so the disagreement changes nothing that is published — do not try to resolve it, and do not import the order's range over this page's.
+**The school and the ministry disagree about `30.01.2027`.** The ministerial order starts the mid-term vacation on the 30th; this page ends срок I on the 30th and starts the vacation on the 31st. Both dates are a weekend, so the disagreement changes nothing that is published — do not try to resolve it, and do not import the order's range over this page's. The two readings are the same Non-school day anyway, sharing a label and a start year, so an operator moving between the two Sources amends one event rather than accumulating two.
+
+**Two ranges of one calendar year may not share a label.** A range is identified by its label and the year its `start` falls in, so two carrying the same label in the same year are one Non-school day and validation refuses the Intake. The boxes are where this bites: `19.05.2027 и 21.05.2027 – ДЗИ за XII клас` is two one-day ranges off one reason, and labelling both `ДЗИ` collides. Number them as the exams are numbered — `Първи ДЗИ`, `Втори ДЗИ` — rather than appending a date. The same goes for the several lines reading only `заповед МОН`.
+
+**A label reworded is a different Non-school day.** The label is the identity, so re-parsing the page and shortening `Коледен базар и коледни тържества` to `Коледен базар` does not rename the event on the calendar: it publishes a second one and leaves the first behind for an operator to delete by hand. When re-parsing, take the labels from the Intake already in the data repository wherever the page still describes the same day, and change one only when it is wrong.
 
 **A vacation may begin or end on a weekend.** The autumn vacation is `31.10 – 02.11.2026`, a Saturday to a Monday, of which only the Monday is a teaching day. Record the range the page states, without trimming it to its weekdays: it is one range with one name, and the weekend days it covers exclude nothing.
 
@@ -48,7 +52,7 @@ Only what falls inside the Term goes in. Both срокове are on the one page
 
 ## Worked example
 
-Given, for a Term running `2026-09-15` to `2027-01-30`, these fragments of the left-hand column and the срок I box:
+Given these fragments of the left-hand column and the срок I box, for a Class whose Term is срок I, `2026-09-15` to `2027-01-30` — the Term decides nothing here but is stated because the reflex is to filter by it:
 
 ```
     1       15.09 – 21.09.2026
@@ -80,9 +84,12 @@ produce:
     { "label": "Ден на независимостта", "start": "2026-09-22", "end": "2026-09-22" },
     { "label": "Есенна ваканция", "start": "2026-10-31", "end": "2026-11-02" },
     { "label": "Коледен базар и коледни тържества", "start": "2026-12-23", "end": "2026-12-23" },
-    { "label": "Коледна ваканция", "start": "2026-12-24", "end": "2027-01-03" }
+    { "label": "Коледна ваканция", "start": "2026-12-24", "end": "2027-01-03" },
+    { "label": "Междусрочна ваканция", "start": "2027-01-31", "end": "2027-02-02" }
   ]
 }
 ```
 
-`2026-09-22` is in no list and comes from the gap between weeks 1 and 2. The mid-term vacation is dropped for falling after the Term. Week 14 checks out: `17.12 – 04.01.2027` holds the weekdays 17, 18, 21, 22, 23, 24, 25, 28, 29, 30, 31 December and 1 and 4 January; remove the bazaar and the Christmas vacation and five are left.
+`2026-09-22` is in no list and comes from the gap between weeks 1 and 2. The mid-term vacation goes in although it begins the day after срок I ends: it is the school year's, not the срок's. Week 14 checks out: `17.12 – 04.01.2027` holds the weekdays 17, 18, 21, 22, 23, 24, 25, 28, 29, 30, 31 December and 1 and 4 January; remove the bazaar and the Christmas vacation and five are left.
+
+The fragment is срок I's half of the page. Weeks 19–36 and the `Неучебни дни за II – ри срок` box are read exactly the same way and their ranges belong in the same document, whichever срок the Term names; they are left out here only to keep the example to one screen.

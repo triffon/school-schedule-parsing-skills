@@ -10,7 +10,7 @@ schemaVersion: "1"
 
 ## The Source
 
-The same ministerial order that fixes the second срок, read for a different purpose: the vacations in item 1 and the individual non-attendance days in item 2. `ministry-of-education-and-science/term` reads the boundaries; this Skill reads what falls inside them.
+The same ministerial order that fixes the second срок, read for a different purpose: the vacations in item 1 and the individual non-attendance days in item 2. `ministry-of-education-and-science/term` reads the boundaries of one срок; this Skill reads the days the year does not teach on, wherever in the year they fall.
 
 Of the two, this is the one that changes. An amendment adding a day off arrives mid-year, and re-parsing this document alone is exactly why the Intake is four files rather than one.
 
@@ -18,13 +18,13 @@ This is the Source of last resort. A school that publishes its own calendar of t
 
 ## Reading it
 
-Each entry is a labelled range of dates: `label`, `start`, `end`, the last two as `YYYY-MM-DD`. A single day is a range whose `start` and `end` are equal.
+Each entry is a labelled range of dates: `label`, `start`, `end`, the last two as `YYYY-MM-DD`. A single day is a range whose `start` and `end` are equal. The `label` is not decoration: together with the calendar year the `start` falls in, it is what identifies the range from one re-parse to the next, so read the two quirks about labels below before inventing one.
 
 **Item 1, `Начало и край на ваканциите (с включени празнични и почивни дни) с изключение на лятната`** — one row per vacation, an inclusive range in the left column and the vacation's name in the right, lower-case and bare: `31.10.2026 г. – 02.11.2026 г. вкл. / есенна`. Capitalise it into a label — `Есенна ваканция`. A vacation split by grade gets one row per grade range; take the row that covers the Class.
 
 **Item 2, `Неучебни дни`** — one row per day, a date in the left column and the reason in the right, running to several lines. The reason is the label; shorten it to its first clause, because the whole of `изпит по български език и литература от националното външно оценяване в края на VII клас и по български език и литература с интегриране на други учебни предмети от националното външно оценяване в края на X клас` is one day off.
 
-Only what falls inside the Term goes in. The order covers a whole school year and an Intake covers one срок.
+The whole school year goes in. The order covers a school year and so does this document: Non-school days belong to the year rather than to a срок, and the same list is published whichever срок the Term names. Nothing here is clipped to the Term or dropped for falling outside it.
 
 ## Quirks
 
@@ -38,7 +38,9 @@ Only what falls inside the Term goes in. The order covers a whole school year an
 
 **Days off in item 2 carry a grade only where the order says so.** `05.05. и 07.05.2027 г.` is marked `за І – ХI клас`; the exam days `19.05`, `21.05`, `18.06` and `21.06` are not marked at all, and are days off for everyone, not only for the grade sitting the exam. Do not narrow an unmarked row to the grades its reason mentions.
 
-**Only what falls inside the Term.** Semantic validation rejects a range outside it. When publishing срок II, the autumn and Christmas vacations are not Non-school days — they are simply not in this Intake. A vacation straddling the boundary is clipped to the part inside, and if what is left holds no Monday-to-Friday day, drop it: the mid-term vacation runs `30.01.2027 г. – 02.02.2027 г.`, and against a срок I that ends on the 30th, a Saturday, the clipped remainder is one weekend day that excludes nothing.
+**Two ranges of one calendar year may not share a label.** A range is identified by its label and the year its `start` falls in, so two carrying the same label in the same year are one Non-school day and validation refuses the Intake. Item 2 is where this bites: one reason often covers two dates — `05.05. и 07.05.2027 г. за І – ХI клас във връзка с Великден и с Деня на храбростта и Българската армия` — and labelling both days off the whole reason produces the collision. Split the reason the way the dates split it, `Великден` and `Ден на храбростта`. Where the artifact gives nothing to tell two days apart, number them as it numbers them (`Първи ДЗИ`, `Втори ДЗИ`) rather than appending a date.
+
+**A label reworded is a different Non-school day.** The label is the identity, so re-parsing this order and shortening `Коледна ваканция` to `Коледа` does not rename the event on the calendar: it publishes a second one and leaves the first behind for an operator to delete by hand. When re-parsing, take the labels from the Intake already in the data repository wherever the order still describes the same day, and change one only when it is wrong.
 
 **Weekends are not Non-school days of their own.** The Timetable has no Saturday or Sunday Lessons, so a weekend excludes nothing and only adds noise to the diff. A vacation that spans or begins on a weekend is still one range, recorded as the order states it — do not split it and do not trim it.
 
@@ -50,7 +52,7 @@ Only what falls inside the Term goes in. The order covers a whole school year an
 
 ## Worked example
 
-Given, for a Term running `2027-02-03` to `2027-06-16` and a Class in V клас:
+Given, for a Class in V клас whose Term is срок II, `2027-02-03` to `2027-06-16` — the Term decides nothing here but is stated because the reflex is to filter by it:
 
 ```
 1. Начало и край на ваканциите (с включени празнични и почивни дни) с изключение
@@ -73,12 +75,14 @@ produce:
 {
   "schemaVersion": "1",
   "ranges": [
+    { "label": "Есенна ваканция", "start": "2026-10-31", "end": "2026-11-02" },
+    { "label": "Междусрочна ваканция", "start": "2027-01-30", "end": "2027-02-02" },
     { "label": "Пролетна ваканция", "start": "2027-04-03", "end": "2027-04-11" },
-    { "label": "Великден и Ден на храбростта", "start": "2027-05-05", "end": "2027-05-05" },
-    { "label": "Великден и Ден на храбростта", "start": "2027-05-07", "end": "2027-05-07" },
+    { "label": "Великден", "start": "2027-05-05", "end": "2027-05-05" },
+    { "label": "Ден на храбростта", "start": "2027-05-07", "end": "2027-05-07" },
     { "label": "Държавен зрелостен изпит", "start": "2027-05-19", "end": "2027-05-19" }
   ]
 }
 ```
 
-The autumn vacation falls before this Term and the mid-term one ends the day before it starts — the easier of the two to include by reflex. The spring vacation is the І–ХI row, not the XII one. `05.05` and `07.05` are two separate days. `06.05.2027`, Гергьовден, is a Non-school day that this artifact does not mention at all, and it is missing from the JSON above for exactly that reason.
+The autumn and mid-term vacations go in although the Term is срок II and both are over before it begins: they are the school year's, not the срок's, and dropping them would take them off a calendar that the срок I run put them on. The spring vacation is the І–ХI row, not the XII one. `05.05` and `07.05` are two separate days, and the one reason covering both is split into two labels so that the two ranges do not collide. `06.05.2027`, Гергьовден, is a Non-school day that this artifact does not mention at all, and it is missing from the JSON above for exactly that reason.
